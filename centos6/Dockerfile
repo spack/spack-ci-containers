@@ -16,7 +16,7 @@ RUN wget http://ftp.tu-chemnitz.de/pub/linux/dag/redhat/el6/en/x86_64/rpmforge/R
     rpm -Uvh realpath-1.17-1.el6.rf.x86_64.rpm
 
 # Install Python dependencies. We need to install mercurial from pip
-# since the version coming with the OS is too ol;d to make tests pass
+# since the version coming with the OS is too old to make tests pass
 RUN pip install pip six flake8==2.6.2 mercurial==3.9.2 urllib3==1.12 requests==2.12.2 setuptools==3.8.1 argparse
 
 RUN useradd spack-test
