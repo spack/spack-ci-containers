@@ -4,7 +4,7 @@ FROM centos:6
 RUN yum install -y epel-release && \
     yum update -y && \
     yum --enablerepo epel groupinstall -y "Development Tools" && \
-    yum install -y curl findutils gcc-c++ gcc gcc-gfortran hostname \
+    yum install -y curl findutils gcc-c++ gcc gcc-gfortran hostname patchelf \
     make patch python-pip python-setuptools python-devel unzip wget xz subversion sudo && \
     yum install -y http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm && \
     yum install -y git && \
