@@ -1,23 +1,3 @@
-diff --git a/lib/spack/spack/bootstrap.py b/lib/spack/spack/bootstrap.py
-index 93e79fbe71..c2d1e34349 100644
---- a/lib/spack/spack/bootstrap.py
-+++ b/lib/spack/spack/bootstrap.py
-@@ -28,9 +28,10 @@ def spack_python_interpreter():
-     """
-     python_cls = type(spack.spec.Spec('python').package)
-     python_prefix = os.path.dirname(os.path.dirname(sys.executable))
--    externals = python_cls.determine_spec_details(
--        python_prefix, [os.path.basename(sys.executable)])
--    external_python = externals[0]
-+    #externals = python_cls.determine_spec_details(
-+    #    python_prefix, [os.path.basename(sys.executable)])
-+    #external_python = externals[0]
-+    external_python = 'python@{0}'.format('.'.join(str(x) for x in sys.version_info[:2]))
- 
-     entry = {
-         'buildable': False,
-diff --git a/lib/spack/spack/relocate.py b/lib/spack/spack/relocate.py
-index e167472b75..0291988211 100644
 --- a/lib/spack/spack/relocate.py
 +++ b/lib/spack/spack/relocate.py
 @@ -987,7 +987,7 @@ def mime_type(filename):
@@ -29,35 +9,3 @@ index e167472b75..0291988211 100644
      tty.debug('[MIME_TYPE] {0} -> {1}'.format(filename, output.strip()))
      # In corner cases the output does not contain a subtype prefixed with a /
      # In those cases add the / so the tuple can be formed.
-diff --git a/lib/spack/spack/store.py b/lib/spack/spack/store.py
-index 2378ff98d8..a6ea41c087 100644
---- a/lib/spack/spack/store.py
-+++ b/lib/spack/spack/store.py
-@@ -201,10 +201,10 @@ def _store():
-     # reserved by Spack to bootstrap its own dependencies, since this would
-     # lead to bizarre behaviors (e.g. cleaning the bootstrap area would wipe
-     # user installed software)
--    if spack.paths.user_bootstrap_store == root:
--        msg = ('please change the install tree root "{0}" in your '
--               'configuration [path reserved for Spack internal use]')
--        raise ValueError(msg.format(root))
-+    #if spack.paths.user_bootstrap_store == root:
-+    #    msg = ('please change the install tree root "{0}" in your '
-+    #           'configuration [path reserved for Spack internal use]')
-+    #    raise ValueError(msg.format(root))
- 
-     return Store(root=root,
-                  unpadded_root=unpadded_root,
-diff --git a/var/spack/repos/builtin/packages/clingo/package.py b/var/spack/repos/builtin/packages/clingo/package.py
-index 1d6b0e7aba..1024b8c0c5 100644
---- a/var/spack/repos/builtin/packages/clingo/package.py
-+++ b/var/spack/repos/builtin/packages/clingo/package.py
-@@ -69,7 +69,7 @@ def cmake_args(self):
-         args = [
-             '-DCLINGO_REQUIRE_PYTHON=ON',
-             '-DCLINGO_BUILD_WITH_PYTHON=ON',
--            '-DCLINGO_BUILD_PY_SHARED=ON',
-+            '-DCLINGO_BUILD_PY_SHARED=OFF',
-             '-DPYCLINGO_USER_INSTALL=OFF',
-             '-DPYCLINGO_USE_INSTALL_PREFIX=ON',
-             '-DCLINGO_BUILD_WITH_LUA=OFF'

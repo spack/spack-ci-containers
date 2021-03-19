@@ -1,10 +1,9 @@
-FROM spack/manylinux1_x86_64
+FROM ghcr.io/alalazo/manylinux1_x86_64:manylinux1
 
 RUN yum update  -y && \
     yum install -y unzip make patch gnupg2 git xz tar perl-devel gettext-devel && \
     rm -rf /var/cache/yum && \
     yum clean all
-
 
 # Update ld.so.conf and ld.so.cache to find stuff in /usr/local/lib
 RUN echo /usr/local/lib > /etc/ld.so.conf.d/libcrypt.conf && ldconfig
@@ -42,8 +41,14 @@ RUN PATH=$(${SPACK_CMD} location -i tar)/bin:$PATH ${SPACK_CMD} install -v gcc@9
 RUN ${SPACK_CMD} compiler add $(${SPACK_CMD} location -i gcc) && \
     cp /home/spack/.spack/linux/compilers.yaml /home/spack/.spack/compilers.yaml
 
+# Move to the correct branch
+RUN cd spack && git fetch origin pull/22354/head:PR/22354 && git checkout PR/22354
+
 # Run a script to build all the versions of clingo we could
 COPY --chown=spack:spack bootstrap_clingo.sh /home/spack/bootstrap_clingo.sh
+COPY --chown=spack:spack install_clingo.py /home/spack/install_clingo.py
+COPY --chown=spack:spack create_binary_mirror.sh /home/spack/create_binary_mirror.sh
 COPY --chown=spack:spack spack.patch /home/spack/spack/spack.patch
+
 RUN cd spack && git apply spack.patch
 RUN PATH=$(${SPACK_CMD} location -i tar)/bin:$PATH ${HOME}/bootstrap_clingo.sh
